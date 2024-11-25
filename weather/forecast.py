@@ -37,24 +37,24 @@ class Forecast:
 
             self.hourly_forecast = response['properties']['periods']
 
-    def tearse_weekly_to_file(self,timestr):
+    def tearse_weekly_to_file(self):
         '''
         Writes tearse weekly forecast to file in reports
         '''
         pass
 
-    def tearse_weekly_to_file(self,timestr):
+    def tearse_weekly_to_file(self):
         '''
         Writes tearse weekly forecast to file in reports
         '''
         pass
 
-    def raw_weekly_to_file(self, timestr):
+    def raw_weekly_to_file(self):
         '''
         Writes weekly forecast to file in reports.
         '''
         if self.weekly_forecast is not None:
-            with open(f'reports/weekly_forecast-{timestr}.txt', 'w') as file:
+            with open(f'reports/weekly_forecast.txt', 'w') as file:
                 file.writelines('''
                     -------------------------------------------------
                     -------------------------------------------------
@@ -71,12 +71,12 @@ class Forecast:
                     ''')
             file.close()
 
-    def raw_hourly_to_file(self, timestr):
+    def raw_hourly_to_file(self):
         '''
         Writes hourly forecast to file in reports.
         '''
         if self.hourly_forecast is not None:
-            with open(f'reports/hourly_forecast-{timestr}.txt', 'w') as file:
+            with open(f'reports/hourly_forecast.txt', 'w') as file:
                 file.writelines('''
                     -------------------------------------------------
                     -------------------------------------------------

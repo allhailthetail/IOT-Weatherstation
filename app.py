@@ -8,9 +8,6 @@ from weather import forecast
 # Initialize argument parser:
 parser=argparse.ArgumentParser()
 
-# Grab timestring in case it's needed later:
-timestr = time.strftime("%Y%m%d-%H%M%S")
-
 # Parser args for the program:
 #
 # Positional Arguments:
@@ -40,12 +37,12 @@ fcast = forecast.Forecast(args.latitude,args.longitude)
 if args.weekly_text and args.raw:
     # If True, fetch weekly forecast
     fcast._get_weekly()
-    fcast.raw_weekly_to_file(timestr)
+    fcast.raw_weekly_to_file()
 
 if args.hourly_text and args.raw:
     # If True, fetch hourly forecast
     fcast._get_hourly()
-    fcast.raw_hourly_to_file(timestr)
+    fcast.raw_hourly_to_file()
 
 if args.weekly_text:
     # I can see doing something nifty here with a Jupyter Notebook or something?
