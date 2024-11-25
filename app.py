@@ -1,8 +1,7 @@
-# import os
-# import sys
-# import json
 import argparse
-import time
+import papermill as pm
+import nbformat
+from nbconvert import HTMLExporter
 from weather import forecast
 
 # Initialize argument parser:
@@ -25,31 +24,52 @@ parser.add_argument('--weekly-text',
 parser.add_argument('--hourly-text',
     help='Print text-based hourly forecast to file',
     action='store_true')
-parser.add_argument('--raw', help='Output raw JSON data', 
+parser.add_argument('--weekly-graphical', help='Output weekly data via Juptyer Notebook and PDF', 
     action='store_true')
-
+parser.add_argument('--hourly-graphical', help='Output hourly data via Juptyer Notebook and PDF', 
+    action='store_true')
 args = parser.parse_args()
 
-# Program flow:
-# For testing: (Little Rock Coords) python app.py 34.7490 -92.2824 --weekly-text --hourly-text --raw
+# Initialize a new forecast:
 fcast = forecast.Forecast(args.latitude,args.longitude)
 
-if args.weekly_text and args.raw:
+# Program Flow:
+# For testing: (Little Rock Coords) python app.py 34.7490 -92.2824 --weekly-text --hourly-text --raw
+# For graphical testing: python app.py 38.8313 -104.8038 --weekly-graphical
+
+
+if args.weekly_text:
     # If True, fetch weekly forecast
     fcast._get_weekly()
     fcast.raw_weekly_to_file()
 
-if args.hourly_text and args.raw:
+if args.hourly_text:
     # If True, fetch hourly forecast
     fcast._get_hourly()
     fcast.raw_hourly_to_file()
 
-if args.weekly_text:
-    # I can see doing something nifty here with a Jupyter Notebook or something?
-    pass
+if args.weekly_graphical:
+    # Queue Jupyter Notebook 'notebooks/weekly_template.ipynb'
+    pm.execute_notebook(
+        'notebooks/weekly_template.ipynb',
+        'reports/weekly_report.ipynb',
+        parameters=dict(latitude=args.latitude, longitude=args.longitude)
+    )
 
-if args.hourly_text:
-    # I can see doing something nifty here with a Jupyter Notebook or something?
+    # Process into HTML:
+    with open('reports/weekly_report.ipynb', 'r', encoding='utf-8') as nb:
+        nb_content = nbformat.read(nb, as_version=4)
+    # instantiate HTMLExporter Instance:
+    exporter = HTMLExporter()
+    # convert to HTML:
+    body, resources = exporter.from_notebook_node(nb_content)
+    # Write to html:
+    with open('reports/weekly_report.html', 'w', encoding='utf-8') as html_file:
+        html_file.write(body)
+
+
+if args.hourly_graphical:
+    # Queue Jupyter Notebook 'notebooks/hourly_template.ipynb'
     pass
 
 
