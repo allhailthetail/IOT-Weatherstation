@@ -11,3 +11,4 @@ class Settings:
         # Access the values from the config file
         self.lat = config.get('coordinates', 'latitude')
         self.long = config.get('coordinates', 'longitude')
+        # self.timestamp = config.get('formatting', 'timestamp')

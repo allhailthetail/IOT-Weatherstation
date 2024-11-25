@@ -1,4 +1,5 @@
 import sys
+import json
 import requests
 
 class Forecast:
@@ -19,13 +20,35 @@ class Forecast:
         
     def get_hourly(self):
         '''
-        Returns an hourly forecast... 
+        Returns an hourly forecast.
         '''
         hourly_forecast_url = self.base_info['properties']['forecastHourly']
         response = requests.get(hourly_forecast_url).json()
 
         self.hourly_forecast = response['properties']['periods']
     
+    def raw_weekly_to_file(self, timestr):
+        '''
+        Writes weekly forecast to file in reports.
+        '''
+        if self.weekly_forecast is not None:
+            with open(f'reports/weekly_forecast-{timestr}.txt', 'w') as file:
+                file.writelines('''
+                    -------------------------------------------------
+                    -------------------------------------------------
+                                Begin Weekly Forecast:\n\n''')
+                text = json.dumps(self.weekly_forecast, sort_keys=False, indent=4)
+                file.writelines(f'Weekly Forecast for ({self.lat},{self.lon}):\n\n')
+                for line in text:
+                    file.writelines(line)
+                file.writelines('''
+                                 End of Weekly Forecast
+
+                    -------------------------------------------------
+                    -------------------------------------------------
+                    ''')
+            file.close()
+
     def get_weekly(self):
         '''
         Returns a dictionary of 12 hour forecast values for the week (inclusive of today)
@@ -34,3 +57,25 @@ class Forecast:
         response = requests.get(weekly_forecast_url).json()
 
         self.weekly_forecast = response['properties']['periods']
+
+    def raw_hourly_to_file(self, timestr):
+        '''
+        Writes hourly forecast to file in reports.
+        '''
+        if self.hourly_forecast is not None:
+            with open(f'reports/hourly_forecast-{timestr}.txt', 'w') as file:
+                file.writelines('''
+                    -------------------------------------------------
+                    -------------------------------------------------
+                                Begin Hourly Forecast:\n\n''')
+                text = json.dumps(self.hourly_forecast, sort_keys=False, indent=4)
+                file.writelines(f'Hourly Forecast for ({self.lat},{self.lon}):\n\n')
+                for line in text:
+                    file.writelines(line)
+                file.writelines('''
+                                 End of Hourly Forecast
+                                 
+                    -------------------------------------------------
+                    -------------------------------------------------
+                    ''')
+            file.close()

@@ -1,9 +1,53 @@
-# needs a way to take in a few parameters, 
-# perhaps have the ability to do either a graphical representation, 
-# or a scrolling text representation...  
-# It'd be nice if it could print out to a PDF...  :)
+# import os
+# import sys
+# import json
+import argparse
+import time
+from weather import forecast
+from weather import settings
+
+# Import settings defaults:
+settings = settings.Settings()
+
+# Initialize argument parser:
+parser=argparse.ArgumentParser()
+
+# Grab timestring in case it's needed later:
+timestr = time.strftime("%Y%m%d-%H%M%S")
+
+# Parser args for the program:
+parser.add_argument('--weekly-text', 
+    help = 'Print text-based weekly forecast to file',
+    action='store_true')
+parser.add_argument('--hourly-text',
+    help='Print text-based hourly forecast to file',
+    action='store_true')
+parser.add_argument('--raw', help='Output raw JSON data', 
+    action='store_true')
+
+args = parser.parse_args()
+
+# Program flow:
+
+fcast = forecast.Forecast(settings.lat,settings.long)
+
+if args.weekly_text and args.raw:
+    # If True, fetch weekly forecast
+    fcast.get_weekly()
+    fcast.raw_weekly_to_file(timestr)
+
+if args.hourly_text and args.raw:
+    # If True, fetch hourly forecast
+    fcast.get_weekly()
+    fcast.raw_hourly_to_file(timestr)
+
+if args.weekly_text:
+    # I can see doing something nifty here with a Jupyter Notebook or something?
+    pass
+
+if args.hourly_text:
+    # I can see doing something nifty here with a Jupyter Notebook or something?
+    pass
 
 
-# For deployment, the app will be installed in the user's personal library.  Whatever the path is for that...?  And then a symlink can point to app.py
-# and the symlink can be called 'weatherapp' or something.  This seems clean?
-
+# print('DEBUG: ',settings.timestamp)
