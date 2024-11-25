@@ -18,15 +18,37 @@ class Forecast:
             print('\nAn error occured:\n\n', err)
             sys.exit()
         
-    def get_hourly(self):
-        '''
-        Returns an hourly forecast.
-        '''
-        hourly_forecast_url = self.base_info['properties']['forecastHourly']
-        response = requests.get(hourly_forecast_url).json()
 
-        self.hourly_forecast = response['properties']['periods']
-    
+    def _get_weekly(self):
+        '''
+        Returns a dictionary of 12 hour forecast values for the week (inclusive of today)
+        '''
+        weekly_forecast_url = self.base_info['properties']['forecast']
+        response = requests.get(weekly_forecast_url).json()
+
+        self.weekly_forecast = response['properties']['periods']
+
+    def _get_hourly(self):
+            '''
+            Returns an hourly forecast.
+            '''
+            hourly_forecast_url = self.base_info['properties']['forecastHourly']
+            response = requests.get(hourly_forecast_url).json()
+
+            self.hourly_forecast = response['properties']['periods']
+
+    def tearse_weekly_to_file(self,timestr):
+        '''
+        Writes tearse weekly forecast to file in reports
+        '''
+        pass
+
+    def tearse_weekly_to_file(self,timestr):
+        '''
+        Writes tearse weekly forecast to file in reports
+        '''
+        pass
+
     def raw_weekly_to_file(self, timestr):
         '''
         Writes weekly forecast to file in reports.
@@ -48,15 +70,6 @@ class Forecast:
                     -------------------------------------------------
                     ''')
             file.close()
-
-    def get_weekly(self):
-        '''
-        Returns a dictionary of 12 hour forecast values for the week (inclusive of today)
-        '''
-        weekly_forecast_url = self.base_info['properties']['forecast']
-        response = requests.get(weekly_forecast_url).json()
-
-        self.weekly_forecast = response['properties']['periods']
 
     def raw_hourly_to_file(self, timestr):
         '''

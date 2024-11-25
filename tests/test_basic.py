@@ -9,18 +9,16 @@ def jprint(obj):
 
 
 from weather import forecast
-from weather import settings
 
 # Begin by importing the settings from the config file:
-settings = settings.Settings()
 
 # Initialize a new Forecast for Little Rock, AR (for testing purposes):
-f = forecast.Forecast(settings.lat,settings.long)
+f = forecast.Forecast('34.7490', '-92.2824')
 
 # Begin tests:
 
-f.get_weekly()
-f.get_hourly()
+f._get_weekly()
+f._get_hourly()
 
 with open('tests/output.txt', 'w') as file:
     weekly_forecast = json.dumps(f.weekly_forecast, sort_keys=False, indent=4)
