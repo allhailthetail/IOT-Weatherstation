@@ -1,7 +1,6 @@
 import argparse
+import subprocess
 import papermill as pm
-import nbformat
-from nbconvert import HTMLExporter
 from weather import forecast
 
 # Initialize argument parser:
@@ -24,10 +23,13 @@ parser.add_argument('--weekly-text',
 parser.add_argument('--hourly-text',
     help='Print text-based hourly forecast to file',
     action='store_true')
+parser.add_argument('--raw', help='Full/Raw JSON Output', 
+    action='store_true')
 parser.add_argument('--weekly-graphical', help='Output weekly data via Juptyer Notebook and PDF', 
     action='store_true')
 parser.add_argument('--hourly-graphical', help='Output hourly data via Juptyer Notebook and PDF', 
     action='store_true')
+
 args = parser.parse_args()
 
 # Initialize a new forecast:
@@ -36,14 +38,24 @@ fcast = forecast.Forecast(args.latitude,args.longitude)
 # Program Flow:
 # For testing: (Little Rock Coords) python app.py 34.7490 -92.2824 --weekly-text --hourly-text --raw
 # For graphical testing: python app.py 38.8313 -104.8038 --weekly-graphical
-
+# jupyter nbconvert --to html --no-input 'reports/weekly_report.ipynb' --output='weekly_report.html' &> /dev/null
 
 if args.weekly_text:
     # If True, fetch weekly forecast
     fcast._get_weekly()
-    fcast.raw_weekly_to_file()
+    fcast.tearse_weekly_to_file()
 
 if args.hourly_text:
+    # If True, fetch hourly forecast
+    fcast._get_hourly()
+    fcast.tearse_hourly_to_file()
+
+if args.weekly_text and args.raw:
+    # If True, fetch weekly forecast
+    fcast._get_weekly()
+    fcast.raw_weekly_to_file()
+
+if args.hourly_text and args.raw:
     # If True, fetch hourly forecast
     fcast._get_hourly()
     fcast.raw_hourly_to_file()
@@ -53,24 +65,14 @@ if args.weekly_graphical:
     pm.execute_notebook(
         'notebooks/weekly_template.ipynb',
         'reports/weekly_report.ipynb',
-        parameters=dict(latitude=args.latitude, longitude=args.longitude)
-    )
+        parameters=dict(latitude=args.latitude, longitude=args.longitude))
 
     # Process into HTML:
-    with open('reports/weekly_report.ipynb', 'r', encoding='utf-8') as nb:
-        nb_content = nbformat.read(nb, as_version=4)
-    # instantiate HTMLExporter Instance:
-    exporter = HTMLExporter()
-    # convert to HTML:
-    body, resources = exporter.from_notebook_node(nb_content)
-    # Write to html:
-    with open('reports/weekly_report.html', 'w', encoding='utf-8') as html_file:
-        html_file.write(body)
-
+    # jupyter nbconvert --to html --no-input 'reports/weekly_report.ipynb' --output='weekly_report.html'
+    subprocess.Popen("jupyter nbconvert --to html --no-input 'reports/weekly_report.ipynb' --output='weekly_report.html'", 
+        shell=True, 
+        stdout=subprocess.PIPE).stdout.read()
 
 if args.hourly_graphical:
-    # Queue Jupyter Notebook 'notebooks/hourly_template.ipynb'
+    # ToDo Develop this
     pass
-
-
-# print('DEBUG: ',settings.timestamp)

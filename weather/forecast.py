@@ -41,34 +41,46 @@ class Forecast:
         '''
         Writes tearse weekly forecast to file in reports
         '''
-        pass
 
-    def tearse_weekly_to_file(self):
+        self.tearse_weekly_forecast = []
+        for day in self.weekly_forecast:
+            self.tearse_weekly_forecast.append({
+                'name': day['name'],
+                'temperature': day['temperature'],
+                'temperatureUnit': day['temperatureUnit'],
+                'windSpeed': day['windSpeed'],
+                'detailedForecast': day['detailedForecast']
+            })
+        
+        with open(f'reports/tearse_weekly_forecast.json', 'w') as file:
+            file.writelines(json.dumps(self.tearse_weekly_forecast))
+        file.close()
+
+    def tearse_hourly_to_file(self):
         '''
-        Writes tearse weekly forecast to file in reports
+        Writes tearse hourly forecast to file in reports
         '''
-        pass
+        self.tearse_hourly_forecast = []
+        for day in self.hourly_forecast:
+            self.tearse_hourly_forecast.append({
+                'startTime': day['startTime'],
+                'endTime': day['endTime'],
+                'temperature': day['temperature'],
+                'temperatureUnit': day['temperatureUnit'],
+                'windSpeed': day['windSpeed'],
+            })
+        
+        with open(f'reports/tearse_hourly_forecast.json', 'w') as file:
+            file.writelines(json.dumps(self.tearse_hourly_forecast))
+        file.close()
 
     def raw_weekly_to_file(self):
         '''
         Writes weekly forecast to file in reports.
         '''
         if self.weekly_forecast is not None:
-            with open(f'reports/weekly_forecast.txt', 'w') as file:
-                file.writelines('''
-                    -------------------------------------------------
-                    -------------------------------------------------
-                                Begin Weekly Forecast:\n\n''')
-                text = json.dumps(self.weekly_forecast, sort_keys=False, indent=4)
-                file.writelines(f'Weekly Forecast for ({self.lat},{self.lon}):\n\n')
-                for line in text:
-                    file.writelines(line)
-                file.writelines('''
-                                 End of Weekly Forecast
-
-                    -------------------------------------------------
-                    -------------------------------------------------
-                    ''')
+            with open(f'reports/weekly_forecast.json', 'w') as file:
+                file.writelines(json.dumps(self.weekly_forecast))
             file.close()
 
     def raw_hourly_to_file(self):
@@ -76,19 +88,6 @@ class Forecast:
         Writes hourly forecast to file in reports.
         '''
         if self.hourly_forecast is not None:
-            with open(f'reports/hourly_forecast.txt', 'w') as file:
-                file.writelines('''
-                    -------------------------------------------------
-                    -------------------------------------------------
-                                Begin Hourly Forecast:\n\n''')
-                text = json.dumps(self.hourly_forecast, sort_keys=False, indent=4)
-                file.writelines(f'Hourly Forecast for ({self.lat},{self.lon}):\n\n')
-                for line in text:
-                    file.writelines(line)
-                file.writelines('''
-                                 End of Hourly Forecast
-                                 
-                    -------------------------------------------------
-                    -------------------------------------------------
-                    ''')
+            with open(f'reports/hourly_forecast.json', 'w') as file:
+                    file.writelines(json.dumps(self.hourly_forecast))
             file.close()
