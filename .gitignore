@@ -165,4 +165,11 @@ cython_debug/
 tests/output.txt
 
 # Ignore contents of reports:
-reports/*
+reports/weekly_report.html
+reports/hourly_report.html
+reports/weekly_report.ipynb
+reports/hourly_report.ipynb
+reports/weekly_report.json
+reports/hourly_report.json
+reports/tearse_weekly_forecast.json
+reports/tearse_hourly_forecast.json
