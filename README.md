@@ -35,12 +35,6 @@ podman run -ti --rm monarch:dev /bin/bash
 # Running the program:
 
 ```
-podman run --volume ./reports:/app/reports \
-    --rm monarch:dev \
-    python3 app.py [LATITUDE] [LONGITUDE] --weekly-text
-```
-
-```
 # In root project folder:
 podman run --volume $(pwd)/reports:/app/reports \
     --volume $(pwd)/notebooks:/app/notebooks \
