@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Point this variable to the full path to wherever monarch resides on your system...
+PROJ_DIR="...../monarch"
+
+# Invoke podman to run a temporary container to fetch the data:
+# This will return basically everything the program is able to generate.
+podman run --volume $PROJ_DIR/reports:/app/reports:Z  \
+    --rm monarch:dev python3 app.py *LAT* *LON* \
+    --weekly-text --hourly-text --raw \
+    --weekly-graphical

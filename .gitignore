@@ -169,6 +169,8 @@ reports/weekly_report.html
 reports/hourly_report.html
 reports/weekly_report.ipynb
 reports/hourly_report.ipynb
+reports/weekly_forecast.json
+reports/hourly_forecast.json
 reports/weekly_report.json
 reports/hourly_report.json
 reports/tearse_weekly_forecast.json

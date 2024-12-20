@@ -5,7 +5,54 @@ Monarch is a weather utility that queries the NOAA weather.gov API interface
 given a valid (presumably US-based) GPS coordinate.
 
 * How can I use Monarch
-Monarch is a Python package/application and can be used as such. Currently, the
-project uses a number of add-on Python packages, so using a virtual environment is recommended.
+Monarch is a Python package/application developed for use with [[https://podman.io][Podman]] or [[https://docker.com][Docker]].
+That being said, with a virtual environment, the Python portion will run standalone.
 
-Alternatively, there is a "dockerfile" that is in fact set up to use Podman.
+As Weather reporting is an ongoing task, I've included means to automate the running of
+the progam so that the data is always up to date with the API data supplied by [[https://weather.gov][NOAA's Weather.gov]].
+This is accomplished via Systemd [[https://wiki.archlinux.org/title/Systemd/Timers][.service and .timer]] userspace calls.
+This behavior is documented so that you know how to configure it for your purposes.
+
+* Limitations and Issues
+- [ ] ? Replace Jupyter Notebooks with a Flask app.
+  - [ ] Scrap volumes and instead open ports to the HTML site.
+    - [ ] Redesign container to run constantly to keep port to site live
+    - [ ] Elliminate the need for storage (in mapped volume) altogether. Impacts ability to store reports unless on the host side...
+    - [ ] Elliminate the need for systemd timers.
+      - Services still used for starting pod?
+- [ ] Limited to running and storing data for a single GPS coordinate pair.
+- [ ] Reported Time Should have Option of being timezone-aware
+- [ ] Graphical report for rpi weather station clock build
+- [ ] Secure Systemd implementation is tricky for Podman volumes
+
+* Quick Start:
+The project assumes the user is runing a systemd-aware Linux Distro, such as Fedora.
+This is what the dev uses and where I'm focused for documentation.  All other things equal,
+the program - if used in Docker/Podman - should behave the same (basic functionality) across any
+computer platform (minus SELinux & Volumes).
+
+1. Install Podman/Docker
+2. Boogie on with my install script:
+   #+begin_src bash
+
+   # cd somewhere permanent and suitable for the project to park and:
+   git clone git@github.com:allhailthetail/monarch.git
+
+   # cd into the repo
+   cd ./monarch
+
+   # Build the container:
+   podman build -t monarch:dev .
+
+   # Test running the container how you like by interacting with it
+   # This'll launch a bash terminal so you can run the python app interactively
+   # make noteo of the changes you'd like in how the app runs.
+   podman run -ti --rm monarch:dev /bin/bash
+
+   # Refer to the project docs for Systemd implementation notes.
+   # Move the service and timer files in to place and include any
+   # changes or personalizations you identified in the previous steps.
+   #
+   # Test and run accordingly.
+   systemctl --user --enable --now weather-report.timer
+   #+end_src
