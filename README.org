@@ -1,0 +1,11 @@
+#+title: Introduction to Monarch
+
+* What is Monarch
+Monarch is a weather utility that queries the NOAA weather.gov API interface
+given a valid (presumably US-based) GPS coordinate.
+
+* How can I use Monarch
+Monarch is a Python package/application and can be used as such. Currently, the
+project uses a number of add-on Python packages, so using a virtual environment is recommended.
+
+Alternatively, there is a "dockerfile" that is in fact set up to use Podman.

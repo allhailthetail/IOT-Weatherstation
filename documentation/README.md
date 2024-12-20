@@ -1,6 +1,4 @@
-# A Simple Web App utilizing NOAA Weather API:
-
-Basic Usage:
+# Basic Usage:
 ```
 python app.py **lat** **lon** [--weekly-text] [--hourly-text] [--weekly-graphical] [--hourly-graphical] [--raw]
 ```
@@ -33,7 +31,6 @@ podman run -ti --rm monarch:dev /bin/bash
 > container when done.
 
 # Running the program:
-
 ```
 # In root project folder:
 podman run --volume $(pwd)/reports:/app/reports \

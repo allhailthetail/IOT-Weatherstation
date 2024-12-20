@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 import papermill as pm
-from weather import forecast
+from src import forecast
 
 # Initialize argument parser:
 parser=argparse.ArgumentParser()
